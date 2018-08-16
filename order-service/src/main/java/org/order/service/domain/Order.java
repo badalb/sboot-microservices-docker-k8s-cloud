@@ -1,29 +1,63 @@
 package org.order.service.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class Order implements Serializable{
-	
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+
+@Entity
+@Table(name = "orders")
+public class Order implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2232766126130616598L;
 
-	private Long orderId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	
-	private OrderStatus orderStatus;
-	
-	private OrderPayment orderPayment;
-	
-	private OrderSku orderSku;
+	private String orderId;
 
-	public Long getOrderId() {
+	@Enumerated(EnumType.ORDINAL)
+	private OrderStatus orderStatus;
+
+	@OneToOne(mappedBy="order")
+	@Cascade({CascadeType.ALL}) 
+	private OrderPayment orderPayment;
+
+	@OneToMany(mappedBy = "order")
+	private List<OrderSku> orderSkus;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(Long orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
+	
 
 	public OrderStatus getOrderStatus() {
 		return orderStatus;
@@ -41,12 +75,12 @@ public class Order implements Serializable{
 		this.orderPayment = orderPayment;
 	}
 
-	public OrderSku getOrderSku() {
-		return orderSku;
+	public List<OrderSku> getOrderSkus() {
+		return orderSkus;
 	}
 
-	public void setOrderSku(OrderSku orderSku) {
-		this.orderSku = orderSku;
+	public void setOrderSkus(List<OrderSku> orderSkus) {
+		this.orderSkus = orderSkus;
 	}
-	
+
 }

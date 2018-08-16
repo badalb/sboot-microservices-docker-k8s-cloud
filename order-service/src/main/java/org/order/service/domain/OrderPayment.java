@@ -2,6 +2,16 @@ package org.order.service.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "order_payment")
 public class OrderPayment implements Serializable {
 
 	/**
@@ -9,22 +19,26 @@ public class OrderPayment implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long orderPaymentId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
 	private Long paymentId;
 
+	@OneToOne
+	@JoinColumn(name = "order_id")
 	private Order order;
 
 	private Double amount;
 
 	private String currency;
 
-	public Long getOrderPaymentId() {
-		return orderPaymentId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setOrderPaymentId(Long orderPaymentId) {
-		this.orderPaymentId = orderPaymentId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getPaymentId() {
@@ -58,5 +72,4 @@ public class OrderPayment implements Serializable {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-
 }
