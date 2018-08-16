@@ -9,7 +9,7 @@
 		<artifactId>sboot-microservices-docker-k8s-cloud</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>async-communication-library</artifactId>
+	<artifactId>async-comm-lib</artifactId>
 	<name>async-communication-library</name>
 	<url>http://maven.apache.org</url>
 	<properties>
