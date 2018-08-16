@@ -1,21 +1,21 @@
 apiVersion: apps/v1beta1 
 kind: Deployment
 metadata:
-  name: authz-service
+  name: product-service
   namespace: microservices
 spec:
   selector:
     matchLabels:
-      app: authz-service
+      app: product-service
   replicas: 1 
   template: 
     metadata:
       labels:
-        app: authz-service
+        app: product-service
     spec:
       containers:
-      - name: authz-service
-        image: badalb/authz-service:latest
+      - name: product-service
+        image: badalb/product-service:latest
         ports:
         - containerPort: 8080
           name: server
