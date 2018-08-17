@@ -40,7 +40,6 @@
     <module>order-service</module>
     <module>k8s-cluster-services</module>
     <module>payment-service</module>
-    <module>async-comm-lib</module>
   </modules>
   
   <dependencies/>
