@@ -36,4 +36,9 @@ public class InventoryRestService {
 		return new ResponseEntity<InventoryVO>(inventoryVO, HttpStatus.OK);
 	}
 
+	@GetMapping("/inventory/{productId}")
+	public @ResponseBody ResponseEntity<Integer> getInventory(@PathVariable Long productId) {
+		return new ResponseEntity<Integer>(100, HttpStatus.OK);
+	}
+
 }

@@ -9,8 +9,13 @@ config:
             hL9dSAZuA8xExjlPmQIDAQAB
             -----END PUBLIC KEY-----   
 
-spring:
-  datasource:
-    url:  jdbc:mysql://${db.host:localhost}:${db.port:3306}/inventories
-    username: ${db.username:root}
-    password: ${db.password:password}
+eureka:
+    enabled: false
+
+ribbon:
+    inventories:
+      listOfServers: http://localhost:8000
+
+feign:
+  hystrix:
+    enabled: true

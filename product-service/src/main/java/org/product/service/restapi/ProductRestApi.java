@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.dozer.DozerBeanMapper;
 import org.product.service.appservice.ProductService;
 import org.product.service.domain.Product;
+import org.product.service.invservice.client.InventoryServiceClient;
 import org.product.service.model.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class ProductRestApi {
 
 	@Autowired
 	private DozerBeanMapper beanMapper;
+	
+	@Autowired
+	private InventoryServiceClient inventoryServiceClient;
 
 	@GetMapping("/products")
 	public @ResponseBody ResponseEntity<List<ProductVO>> getProduct() {
@@ -31,6 +35,11 @@ public class ProductRestApi {
 		List<Product> products = productService.getProduct();
 		List<ProductVO> productVoList = products.stream().map(product -> beanMapper.map(product, ProductVO.class))
 				.collect(Collectors.toList());
+		//for(Product p: products) {
+			Integer inv = inventoryServiceClient.getInventory(1L);
+			System.out.println(inv);
+		//}
+		
 		return new ResponseEntity<List<ProductVO>>(productVoList, HttpStatus.OK);
 
 	}
