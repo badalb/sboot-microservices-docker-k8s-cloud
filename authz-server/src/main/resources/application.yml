@@ -24,3 +24,9 @@ config:
             /myh1zM6m8cbL5cYFPyP099thbVxzJkjHWqywvQih/qOOjliomKbM9pxG8Z1dB26
             hL9dSAZuA8xExjlPmQIDAQAB
             -----END PUBLIC KEY-----
+
+spring:
+  datasource:
+    url:  jdbc:mysql://${db.host:localhost}:${db.port:3306}/authz
+    username: ${db.username:root}
+    password: ${db.password:password}

@@ -40,5 +40,4 @@ public class InventoryRestService {
 	public @ResponseBody ResponseEntity<Integer> getInventory(@PathVariable Long productId) {
 		return new ResponseEntity<Integer>(100, HttpStatus.OK);
 	}
-
 }

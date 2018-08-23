@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
@@ -17,74 +17,54 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+	static final String CLIEN_ID = "trusted-client";
+	static final String CLIENT_SECRET = "$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu";
+	static final String GRANT_TYPE_PASSWORD = "password";
+	static final String AUTHORIZATION_CODE = "authorization_code";
+	static final String REFRESH_TOKEN = "refresh_token";
+	static final String IMPLICIT = "implicit";
+	static final String SCOPE_READ = "read";
+	static final String SCOPE_WRITE = "write";
+	static final String TRUST = "trust";
+	static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1*60*60;
+	static final int FREFRESH_TOKEN_VALIDITY_SECONDS = 6*60*60;
+	
 	@Value("${config.oauth2.privateKey}")
 	private String privateKey;
-
-	@Value("${config.oauth2.publicKey}")
-	private String publicKey;
-	
-    @Value("${security.oauth2.resource.id}")
-    private String resourceId;
-
-    @Value("${access_token.validity_period}")
-    private int accessTokenValiditySeconds;
-
-    @Value("${refresh_token.validity_period}")
-    private int refreshTokenValiditySeconds;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Bean
-	public JwtAccessTokenConverter tokenEnhancer() {
+	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 		converter.setSigningKey(privateKey);
-		//converter.setVerifierKey(publicKey);
+		//converter.setSigningKey("as466gf");
 		return converter;
 	}
 
 	@Bean
-	public JwtTokenStore tokenStore() {
-		return new JwtTokenStore(tokenEnhancer());
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(accessTokenConverter());
 	}
 
 	@Override
-	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer
-        .tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
-        .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+	public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
+
+		configurer
+				.inMemory()
+				.withClient(CLIEN_ID)
+				.secret(CLIENT_SECRET)
+				.authorizedGrantTypes(GRANT_TYPE_PASSWORD, AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT )
+				.scopes(SCOPE_READ, SCOPE_WRITE, TRUST)
+				.accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS).
+				refreshTokenValiditySeconds(FREFRESH_TOKEN_VALIDITY_SECONDS);
 	}
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore())
-				.accessTokenConverter(tokenEnhancer());
+		endpoints.tokenStore(tokenStore())
+				.authenticationManager(authenticationManager)
+				.accessTokenConverter(accessTokenConverter());
 	}
-
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("normal-app")
-						  .authorizedGrantTypes("authorization_code", "implicit")
-						  .authorities("ROLE_CLIENT").scopes("read", "write")
-						  .resourceIds(resourceId)
-						  .accessTokenValiditySeconds(accessTokenValiditySeconds)
-						  .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
-						  .and()
-						  .withClient("trusted-app")
-						  .authorizedGrantTypes("client_credentials", "password", "refresh_token")
-						  .authorities("ROLE_TRUSTED_CLIENT").scopes("read", "write").resourceIds(resourceId)
-						  .accessTokenValiditySeconds(accessTokenValiditySeconds)
-						  .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
-						  //.secret("secret")
-						  .and()
-						  .withClient("register-app")
-						  .authorizedGrantTypes("client_credentials")
-						  .authorities("ROLE_REGISTER")
-						  .scopes("read").resourceIds(resourceId).secret("secret").and()
-						  .withClient("my-client-with-registered-redirect")
-						  .authorizedGrantTypes("authorization_code")
-						  .authorities("ROLE_CLIENT").scopes("read", "trust").resourceIds("oauth2-resource")
-						  .redirectUris("http://anywhere?key=value");
-	}
-
 }
