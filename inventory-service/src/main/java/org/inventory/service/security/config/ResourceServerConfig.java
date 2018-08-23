@@ -42,9 +42,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.requestMatcher(new OAuthRequestedMatcher()).anonymous().disable().authorizeRequests()
-				.antMatchers(HttpMethod.OPTIONS).permitAll().antMatchers("/api/hello").access("hasAnyRole('USER')")
-				.antMatchers("/api/me").hasAnyRole("USER", "ADMIN").antMatchers("/api/register")
-				.hasAuthority("ROLE_REGISTER");
+				.antMatchers(HttpMethod.OPTIONS).permitAll().antMatchers("/api/me").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/api/v1/**").hasAuthority("ADMIN");
 	}
 
 	private static class OAuthRequestedMatcher implements RequestMatcher {
@@ -77,6 +76,5 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		defaultTokenServices.setTokenEnhancer(tokenEnhancer());
 		return defaultTokenServices;
 	}
-
 
 }
