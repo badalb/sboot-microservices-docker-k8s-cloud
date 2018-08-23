@@ -5,4 +5,3 @@ val combineddata = keyvaluemap.combineByKey((v) => (v,1),(acc: (Int,Int),v) => (
 val averagedata = combineddata.map{ case(map,value) => (key,value._1 / value._2.toFloat) }
 val	sortedaverage = averagedata.sortBy(_._2)
 sortedaverage.take(10)
-
