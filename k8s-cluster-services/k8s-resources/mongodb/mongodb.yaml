@@ -71,6 +71,3 @@ spec:
       - name: mongodb-data
         hostPath:
           path: /k8s-local-data/mongodb/data
-          type: Directory
-      nodeSelector:
-        mongodb-server: singlenode
