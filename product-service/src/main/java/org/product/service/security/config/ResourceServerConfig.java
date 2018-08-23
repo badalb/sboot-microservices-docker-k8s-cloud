@@ -43,7 +43,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http.requestMatcher(new OAuthRequestedMatcher()).anonymous().disable().authorizeRequests()
 		.antMatchers(HttpMethod.OPTIONS).permitAll().antMatchers("/api/me").hasAnyRole("USER", "ADMIN")
-		.antMatchers("/api/v1/**").hasAuthority("ADMIN");
+		.antMatchers("/api/v1/*").hasAnyRole("USER", "ADMIN");
 	}
 
 	private static class OAuthRequestedMatcher implements RequestMatcher {
