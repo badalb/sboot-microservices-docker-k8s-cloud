@@ -25,7 +25,7 @@ public class ProductRestApi {
 
 	@Autowired
 	private DozerBeanMapper beanMapper;
-	
+
 	@Autowired
 	private InventoryServiceClient inventoryServiceClient;
 
@@ -35,11 +35,12 @@ public class ProductRestApi {
 		List<Product> products = productService.getProduct();
 		List<ProductVO> productVoList = products.stream().map(product -> beanMapper.map(product, ProductVO.class))
 				.collect(Collectors.toList());
-		//for(Product p: products) {
-			Integer inv = inventoryServiceClient.getInventory(1L);
-			System.out.println(inv);
-		//}
-		
+		for (ProductVO p : productVoList) {
+			Integer availablity = inventoryServiceClient.getInventory(p.getId());
+			System.out.println(availablity);
+			p.setInventory(availablity);
+		}
+
 		return new ResponseEntity<List<ProductVO>>(productVoList, HttpStatus.OK);
 
 	}

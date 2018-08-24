@@ -3,9 +3,10 @@ package org.product.service.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "products")
 public class Product implements Serializable{
 
 	/**
@@ -13,6 +14,7 @@ public class Product implements Serializable{
 	 */
 	private static final long serialVersionUID = -998472824079950493L;
 	
+	@Id
 	private Long id;
 	
 	private String name;

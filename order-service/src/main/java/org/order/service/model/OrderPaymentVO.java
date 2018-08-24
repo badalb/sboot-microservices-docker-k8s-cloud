@@ -15,6 +15,10 @@ public class OrderPaymentVO implements Serializable {
 
 	private String currency;
 
+	private String paymentStatus;
+
+	private String orderId;
+
 	public Long getPaymentId() {
 		return paymentId;
 	}
@@ -37,6 +41,22 @@ public class OrderPaymentVO implements Serializable {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 }

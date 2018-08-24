@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {
@@ -29,14 +28,14 @@ public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String orderId;
 
 	@Enumerated(EnumType.ORDINAL)
 	private OrderStatus orderStatus;
 
-	@OneToOne(mappedBy="order")
-	@Cascade({CascadeType.ALL}) 
+	@OneToOne(mappedBy = "order")
+	@Cascade({ CascadeType.ALL })
 	private OrderPayment orderPayment;
 
 	@OneToMany(mappedBy = "order")
@@ -57,7 +56,6 @@ public class Order implements Serializable {
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	
 
 	public OrderStatus getOrderStatus() {
 		return orderStatus;
