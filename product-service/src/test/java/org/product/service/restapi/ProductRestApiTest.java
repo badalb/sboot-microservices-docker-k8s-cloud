@@ -68,7 +68,6 @@ public class ProductRestApiTest {
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		System.out.println(result.getResponse());
-
 	}
 
 }
